@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Pokemon {
+  id                    Int                @id
+  name                  String
+  base_experience       Int
+  height                Int
+  is_default            Boolean
+  order                 Int
+  weight                Int
+  location_area_encounters String
+  speciesId             Int
+  species               PokemonSpecies     @relation(fields: [speciesId], references: [id])
+
+  abilities             PokemonAbility[]
+  forms                 PokemonForm[]
+  gameIndices           VersionGameIndex[]
+  heldItems             PokemonHeldItem[]
+  moves                 PokemonMove[]
+  pastTypes             PokemonTypePast[]
+  stats                 PokemonStat[]
+  types                 PokemonType[]
+
+  sprites               PokemonSprites?
+  cries                 PokemonCries?
+}
+
+model PokemonAbility {
+  pokemonId Int
+  abilityId Int
+  is_hidden Boolean
+  slot      Int
+  pokemon   Pokemon   @relation(fields: [pokemonId], references: [id])
+  ability   Ability   @relation(fields: [abilityId], references: [id])
+
+  @@id([pokemonId, abilityId])
+}
+
+model Ability {
+  id     Int              @id
+  name   String
+  effect String?
+  pokemonAbilities PokemonAbility[]
+}
+
+model PokemonSpecies {
+  id      Int       @id
+  name    String
+  pokemon Pokemon[]
+}
+
+model PokemonForm {
+  id        Int     @id
+  name      String
+  pokemonId Int
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+}
+
+model VersionGameIndex {
+  id         Int     @id @default(autoincrement())
+  game_index Int
+  versionId  Int
+  pokemonId  Int
+  pokemon    Pokemon @relation(fields: [pokemonId], references: [id])
+  version    Version @relation(fields: [versionId], references: [id])
+}
+
+model Version {
+  id                Int                 @id
+  name              String
+  versionGameIndices VersionGameIndex[]
+}
+
+model PokemonHeldItem {
+  pokemonId Int
+  itemId    Int
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+  item      Item    @relation(fields: [itemId], references: [id])
+
+  @@id([pokemonId, itemId])
+}
+
+model Item {
+  id               Int               @id
+  name             String
+  pokemonHeldItems PokemonHeldItem[]
+}
+
+model PokemonMove {
+  pokemonId         Int
+  moveId            Int
+  versionGroupId    Int
+  moveLearnMethodId Int
+  level             Int
+
+  pokemon           Pokemon         @relation(fields: [pokemonId], references: [id])
+  move              Move            @relation(fields: [moveId], references: [id])
+  versionGroup      VersionGroup    @relation(fields: [versionGroupId], references: [id])
+  moveLearnMethod   MoveLearnMethod @relation(fields: [moveLearnMethodId], references: [id])
+
+  @@id([pokemonId, moveId, versionGroupId, moveLearnMethodId])
+}
+
+model Move {
+  id           Int             @id
+  name         String
+  power        Int?
+  pp           Int?
+  accuracy     Int?
+  pokemonMoves PokemonMove[]
+}
+
+model VersionGroup {
+  id           Int              @id
+  name         String
+  pokemonMoves PokemonMove[]
+}
+
+model MoveLearnMethod {
+  id           Int              @id
+  name         String
+  pokemonMoves PokemonMove[]
+}
+
+model PokemonStat {
+  pokemonId Int
+  statId    Int
+  base_stat Int
+  effort    Int
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+  stat      Stat    @relation(fields: [statId], references: [id])
+
+  @@id([pokemonId, statId])
+}
+
+model Stat {
+  id            Int             @id
+  name          String
+  pokemonStats  PokemonStat[]
+}
+
+model PokemonType {
+  pokemonId Int
+  typeId    Int
+  slot      Int
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+  type      Type    @relation(fields: [typeId], references: [id])
+
+  @@id([pokemonId, typeId])
+}
+
+model Type {
+  id            Int             @id
+  name          String
+  pokemonTypes  PokemonType[]
+}
+
+model PokemonSprites {
+  id        Int     @id @default(autoincrement())
+  pokemonId Int     @unique
+  sprites   Json
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+}
+
+model PokemonCries {
+  id        Int     @id @default(autoincrement())
+  pokemonId Int     @unique
+  cries     Json
+  pokemon   Pokemon @relation(fields: [pokemonId], references: [id])
+}
