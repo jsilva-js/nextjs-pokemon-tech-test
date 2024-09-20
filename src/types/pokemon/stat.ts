@@ -1,3 +1,4 @@
+import { NamedAPIResource } from "../namedAPI";
 
 export interface PokemonStat {
     /** The stat the Pokémon has */
