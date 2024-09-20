@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Import prisma from a central location
 import { fetchAndStorePokemons } from '@/utils/fetchPokemon';
+import { ApiPokemonResponseType } from './types';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -40,7 +41,7 @@ export async function GET(request: Request) {
             .filter(p => p !== undefined);
 
         const totalPokemonCount = 1010; // Update this to the actual total number of Pokémon
-        const result = {
+        const result: ApiPokemonResponseType = {
             count: totalPokemonCount,
             next: offset + limit < totalPokemonCount ? `/api/pokemon?offset=${offset + limit}&limit=${limit}` : null,
             previous: offset - limit >= 0 ? `/api/pokemon?offset=${offset - limit}&limit=${limit}` : null,
