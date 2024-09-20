@@ -1,83 +1,55 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-
-interface Pokemon {
-  name: string;
-  image: string | null;
-}
-
-interface PokemonData {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Pokemon[];
-}
+'use client'
+import Card from '@/components/pokemon/Card';
+import { usePokemon } from '@/context/pokemon/hooks';
+// import Card from '@/components/Card';
+import { useEffect } from 'react';
 
 export default function HomePage() {
-  const [pokemonData, setPokemonData] = useState<PokemonData | null>(null);
-  const [offset, setOffset] = useState<number>(0);
-  const limit = 20; // Number of Pokémon per page
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const { state, setOffset } = usePokemon();
 
-  const fetchPokemon = async (offset: number) => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/pokemon?limit=${limit}&offset=${offset}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch Pokémon data.');
-      }
-      const data = await response.json();
-      console.log(data)
-      setPokemonData(data);
-    } catch (err) {
-      console.error(err);
-      setError('Failed to load Pokémon data.');
-    } finally {
-      setLoading(false);
+  const handleNext = () => {
+      setOffset(state.offset + 10);
+  };
+
+  const handlePrevious = () => {
+    if (state.offset - 10 >= 0) {
+      setOffset(state.offset - 10);
     }
   };
 
   useEffect(() => {
-    fetchPokemon(offset);
-  }, [offset]);
+    console.log(state)
+  }, [state]);
 
-  const handleNext = () => {
-    if (pokemonData && pokemonData.next) {
-      setOffset(offset + limit);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (pokemonData && pokemonData.previous && offset - limit >= 0) {
-      setOffset(offset - limit);
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error || !pokemonData) return <p>{error || 'No data available.'}</p>;
+  if (state.loading) return <p className="text-center mt-4">Loading...</p>;
+  if (state.error || !state.page)
+    return <p className="text-center mt-4">{state.error || 'No data available.'}</p>;
 
   return (
-    <div>
-      <h1>Pokémon List</h1>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {/* {pokemonData.results.map((pokemon) => (
-          <li key={pokemon.name} style={{ display: 'inline-block', margin: '10px' }}>
-            {pokemon.image ? (
-              <img src={pokemon.image} alt={pokemon.name} width="100" height="100" />
-            ) : (
-              <div style={{ width: '100px', height: '100px', backgroundColor: '#f0f0f0' }} />
-            )}
-            <p>{pokemon.name}</p>
-          </li>
-        ))} */}
-      </ul>
-      <div>
-        <button onClick={handlePrevious} disabled={!pokemonData.previous || offset === 0}>
+    <div className="max-w-4xl mx-auto px-4">
+      <h1 className="text-3xl font-bold text-center my-8">Pokémon List</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {state.page.map((pokemon) => (
+          <Card key={pokemon.id} pokemon={pokemon} />
+        ))}
+      </div>
+      <div className="flex justify-between my-8">
+        <button
+          onClick={handlePrevious}
+          disabled={state.offset === 0}
+          className={`px-4 py-2 rounded bg-blue-500 text-white ${
+            state.offset === 0 ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
           Previous
         </button>
-        <button onClick={handleNext} disabled={!pokemonData.next}>
+        <button
+          onClick={handleNext}
+          disabled={state.offset + 10 >= 1310}
+          className={`px-4 py-2 rounded bg-blue-500 text-white ${
+            (state.offset + 10 >= 1310) ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
           Next
         </button>
       </div>

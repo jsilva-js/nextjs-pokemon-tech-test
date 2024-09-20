@@ -6,7 +6,7 @@ import { ApiPokemonResponseType } from './types';
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
 
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const limit = 10;
     const offset = parseInt(searchParams.get('offset') || '0');
 
     try {
@@ -36,19 +36,12 @@ export async function GET(request: Request) {
             ...fetchedPokemons,
         ];
 
-        const sortedPokemons = pokemonIds
+        const sortedPokemons: ApiPokemonResponseType = pokemonIds
             .map(id => allPokemons.find(p => p.id === id))
             .filter(p => p !== undefined);
 
-        const totalPokemonCount = 1010; // Update this to the actual total number of Pokémon
-        const result: ApiPokemonResponseType = {
-            count: totalPokemonCount,
-            next: offset + limit < totalPokemonCount ? `/api/pokemon?offset=${offset + limit}&limit=${limit}` : null,
-            previous: offset - limit >= 0 ? `/api/pokemon?offset=${offset - limit}&limit=${limit}` : null,
-            results: sortedPokemons,
-        };
 
-        return NextResponse.json(result);
+        return NextResponse.json(sortedPokemons);
     } catch (error) {
         console.error('Error fetching Pokémon data:', error);
         return NextResponse.error();

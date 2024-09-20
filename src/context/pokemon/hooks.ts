@@ -1,6 +1,6 @@
-
-import { useContext } from 'react';
-import { PokemonContext } from '@/context/index';
+'use client'
+import { useContext, useEffect } from 'react';
+import { PokemonContext } from '@/context/pokemon/index';
 
 export function usePokemon() {
     const context = useContext(PokemonContext);
@@ -11,17 +11,17 @@ export function usePokemon() {
     const { state, dispatch } = context;
 
     const fetchPokemonPage = async (offset: number) => {
-        dispatch({ type: 'FETCH_POKEMON_REQUEST' });
+        dispatch({ type: 'FETCH_POKEMON_PAGE_REQUEST' });
         try {
-            const response = await fetch(`/api/pokemon?limit=${state.limit}&offset=${offset}`);
+            const response = await fetch(`/api/pokemon?offset=${offset}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch Pokémon data.');
             }
             const data = await response.json();
-            dispatch({ type: 'FETCH_POKEMON_SUCCESS', payload: data });
+            dispatch({ type: 'FETCH_POKEMON_PAGE_SUCCESS', payload: data });
         } catch (err) {
             console.error(err);
-            dispatch({ type: 'FETCH_POKEMON_FAILURE', error: 'Failed to load Pokémon data.' });
+            dispatch({ type: 'FETCH_POKEMON_PAGE_FAILURE', error: 'Failed to load Pokémon data.' });
         }
     };
 
@@ -29,7 +29,11 @@ export function usePokemon() {
         dispatch({ type: 'SET_OFFSET', offset });
     };
 
+    useEffect(() => {
+        fetchPokemonPage(state.offset);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.offset]);
 
 
-    return { state, setOffset, fetchPokemonPage };
+    return { state, setOffset };
 }
