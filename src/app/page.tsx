@@ -29,7 +29,7 @@ export default function HomePage() {
         throw new Error('Failed to fetch Pokémon data.');
       }
       const data = await response.json();
-      console.log({data})
+      console.log(data)
       setPokemonData(data);
     } catch (err) {
       console.error(err);
