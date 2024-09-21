@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma'; // Import prisma from a central location
+import { findPokemonsByIds } from '@/lib/queries/db';
 import { fetchAndStorePokemons } from '@/utils/fetchPokemon';
-import { ApiPokemonResponseType } from './types';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -12,34 +11,26 @@ export async function GET(request: Request) {
     try {
         const pokemonIds = Array.from({ length: limit }, (_, i) => offset + i + 1);
 
-        const existingPokemons = await prisma.pokemon.findMany({
-            where: {
-                pokemonId: { in: pokemonIds },
-            },
-        });
-
-        const existingPokemonIds = new Set(existingPokemons.map(p => p.pokemonId));
+        const existingPokemons = await findPokemonsByIds(pokemonIds);
+        const existingPokemonIds = new Set(existingPokemons.map(p => p.id));
 
         const pokemonsToFetch = pokemonIds.filter(id => !existingPokemonIds.has(id));
 
         const fetchedPokemons = await fetchAndStorePokemons(pokemonsToFetch);
 
         const allPokemons = [
-            ...existingPokemons.map(pokemon => {
-                const pokemonData = JSON.parse(pokemon.data);
-                return {
-                    id: pokemonData.id,
-                    name: pokemonData.name,
-                    image: pokemonData.sprites.front_default,
-                };
-            }),
+            ...existingPokemons.map(pokemonData => ({
+                id: pokemonData.id,
+                name: pokemonData.name,
+                image: pokemonData.sprites.front_default,
+            })),
             ...fetchedPokemons,
         ];
 
-        const sortedPokemons: ApiPokemonResponseType = pokemonIds
+        // Sort Pokémon data in the order of requested IDs
+        const sortedPokemons = pokemonIds
             .map(id => allPokemons.find(p => p.id === id))
             .filter(p => p !== undefined);
-
 
         return NextResponse.json(sortedPokemons);
     } catch (error) {

@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { createPokemon } from '@/lib/queries/db';
 import axios from 'axios';
 
 
@@ -11,12 +11,7 @@ export async function fetchAndStorePokemons(pokemonsToFetch: number[]) {
             const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
             const pokemonData = pokemonResponse.data;
 
-            await prisma.pokemon.create({
-                data: {
-                    pokemonId: pokemonData.id,
-                    data: JSON.stringify(pokemonData),
-                },
-            });
+            await createPokemon(pokemonData);
 
             fetchedPokemons.push({
                 id: pokemonData.id,
