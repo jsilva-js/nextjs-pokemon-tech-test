@@ -2,6 +2,7 @@
 ## Getting Started
 
 1. `npm install`
+2. `npx prisma db push`
 
 run the development server:
 
