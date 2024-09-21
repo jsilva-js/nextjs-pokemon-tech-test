@@ -6,7 +6,7 @@ export async function fetchAndStorePokemons(pokemonsToFetch: number[]) {
     const fetchedPokemons = [];
     for (const id of pokemonsToFetch) {
         try {
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 200));
 
             const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
             const pokemonData = pokemonResponse.data;
