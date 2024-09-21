@@ -39,9 +39,7 @@ It covers the data flow from fetching Pokémon information from an external API 
 
 ## Poplin Test Preview Video
 
-[<video src="./poplinTestPreview.mp4" placeholder="./poplinTestPreview.mp4" autoplay loop controls muted title="poplin test preview">
-    Sorry, your browser doesn't support HTML 5 video.
-</video>](https://github.com/jsilva-js/poplin-test/blob/main/poplinTestPreview.mp4)
+https://github.com/jsilva-js/poplin-test/blob/main/poplinTestPreview.mp4
 
 
 ## Table of Contents
