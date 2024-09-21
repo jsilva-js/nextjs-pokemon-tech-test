@@ -11,7 +11,10 @@ const PokemonPage: React.FC<PokemonPageProps> = ({ pokemon }) => {
 
   return (
     <div>
-      <h1 className='text-lg font-bold'>Pokémon Details</h1>
+        <div className='flex justify-center'>
+      <h1 className='text-lg font-bold text-lime-400'>Pokémon Details</h1>
+
+        </div>
       <ul>
         {pokemonProperties.map((property) => {
           const value = pokemon[property];

@@ -3,6 +3,7 @@ import React from 'react';
 import { getPokemonById } from '@/lib/queries/index';
 import { Pokemon } from '@/types/pokemon';
 import PokemonPage from '@/components/pokemon/Page';
+import Image from 'next/image';
 
 interface PageProps {
     params: { pokemon: string };
@@ -30,9 +31,20 @@ interface PageProps {
     }
   
     return (
-      <div>
-        <h1>{pokemonData.name}</h1>
-        <PokemonPage pokemon={pokemonData} />
+      <div className=''>
+        <div className='flex justify-center items-center'>
+            <Image
+            width={120}
+            height={120}
+            src={pokemonData.sprites.front_default}
+            alt={pokemonData.name}
+            />
+            <h1 className='text-pink-600 text-[4rem]'>{pokemonData.name}</h1>
+
+        </div>
+        <div className='flex justify-center'>
+            <PokemonPage pokemon={pokemonData} />
+        </div>
       </div>
     );
   }
