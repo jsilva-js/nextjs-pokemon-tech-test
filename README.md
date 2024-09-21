@@ -1,7 +1,10 @@
 
 ## Getting Started
 
-First, run the development server:
+1. `npm install`
+2. `npx prisma db push`
+
+run the development server:
 
 ```bash
 npm run dev
