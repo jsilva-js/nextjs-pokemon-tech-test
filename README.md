@@ -3,7 +3,7 @@
 
 1. `npm install`
 2. `npx prisma db push`
-(for any error you can delete `/prisma/dev.db` and re-run `npx prisma db push`)
+(for any error you can delete `/prisma/dev.db`, `touch dev.db` on `/prisma` and re-run `npx prisma db push`)
 
 run the development server:
 
