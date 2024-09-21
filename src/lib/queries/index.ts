@@ -5,22 +5,18 @@ import { Pokemon } from '@/types/pokemon';
 
 export async function getPokemonById(pokemonId: number): Promise<Pokemon | null> {
     try {
-        // Check if the Pokémon exists in the database
         const pokemonRecord = await prisma.pokemon.findUnique({
             where: { pokemonId },
         });
 
         if (pokemonRecord) {
-            // Parse the data and return
             const pokemonData: Pokemon = JSON.parse(pokemonRecord.data);
             return pokemonData;
         }
 
-        // Fetch from PokeAPI and store in database
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
         const pokemonData: Pokemon = response.data;
 
-        // Store in database
         await prisma.pokemon.create({
             data: {
                 pokemonId: pokemonData.id,
