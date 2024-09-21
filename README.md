@@ -39,7 +39,7 @@ It covers the data flow from fetching Pokémon information from an external API 
 
 ## Poplin Test Preview Video
 
-https://github.com/jsilva-js/poplin-test/blob/main/poplinTestPreview.mp4
+![Poplin test video](https://github.com/jsilva-js/poplin-test/blob/main/poplinTestPreview.mp4)
 
 
 ## Table of Contents
