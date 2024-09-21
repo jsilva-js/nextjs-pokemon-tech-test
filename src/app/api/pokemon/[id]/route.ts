@@ -1,21 +1,26 @@
-import { NextResponse } from 'next/server';
-import { getPokemonById } from '@/lib/queries/index';
+import axios from 'axios';
+import { Pokemon } from '@/types/pokemon';
+import { findPokemonById, createPokemon } from '@/lib/queries/db';
 
-export async function GET(
-    request: Request,
-    { params }: { params: { id: string } }
-) {
-    const pokemonId = parseInt(params.id);
+export async function getPokemonById(pokemonId: number): Promise<Pokemon | null> {
+    try {
+        // Check if the Pokémon exists in the database
+        const pokemonData = await findPokemonById(pokemonId);
 
-    if (isNaN(pokemonId)) {
-        return NextResponse.json({ error: 'Invalid Pokémon ID' }, { status: 400 });
-    }
+        if (pokemonData) {
+            return pokemonData;
+        }
 
-    const pokemonData = await getPokemonById(pokemonId);
+        // Fetch Pokémon data from the external API if not found in the database
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+        const newPokemonData: Pokemon = response.data;
 
-    if (pokemonData) {
-        return NextResponse.json(pokemonData);
-    } else {
-        return NextResponse.json({ error: 'Pokémon not found' }, { status: 404 });
+        // Save the new Pokémon data to the database
+        await createPokemon(newPokemonData);
+
+        return newPokemonData;
+    } catch (error) {
+        console.error('Error fetching Pokémon data:', error);
+        return null;
     }
 }

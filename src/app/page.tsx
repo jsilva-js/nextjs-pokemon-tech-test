@@ -1,8 +1,6 @@
 'use client'
 import Card from '@/components/pokemon/Card';
 import { usePokemon } from '@/context/pokemon/hooks';
-// import Card from '@/components/Card';
-import { useEffect } from 'react';
 
 export default function HomePage() {
   const { state, setOffset } = usePokemon();
@@ -17,9 +15,6 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    console.log(state)
-  }, [state]);
 
   if (state.loading) return <p className="text-center mt-4">Loading...</p>;
   if (state.error || !state.page)
