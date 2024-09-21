@@ -1,5 +1,10 @@
 import ListPokemon from "@/components/pokemon/List";
+import { PokemonProvider } from "@/context/pokemon";
 
 export default function HomePage() {
-  return <ListPokemon />;
+  return (
+    <PokemonProvider>
+      <ListPokemon />;
+    </PokemonProvider>
+  );
 }
