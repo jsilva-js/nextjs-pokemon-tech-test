@@ -18,6 +18,7 @@ export function usePokemon() {
                 throw new Error('Failed to fetch Pokémon data.');
             }
             const data = await response.json();
+            console.log({ data })
             dispatch({ type: 'FETCH_POKEMON_PAGE_SUCCESS', payload: data });
         } catch (err) {
             console.error(err);
@@ -30,7 +31,9 @@ export function usePokemon() {
     };
 
     useEffect(() => {
+        console.log('called')
         fetchPokemonPage(state.offset);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.offset]);
 

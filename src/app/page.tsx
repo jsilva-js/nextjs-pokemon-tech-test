@@ -1,6 +1,7 @@
 'use client'
 import Card from '@/components/pokemon/Card';
 import { usePokemon } from '@/context/pokemon/hooks';
+import { useEffect } from 'react';
 
 export default function HomePage() {
   const { state, setOffset } = usePokemon();
@@ -14,6 +15,12 @@ export default function HomePage() {
       setOffset(state.offset - 10);
     }
   };
+
+  useEffect(() => { 
+    if(!state.page) {
+      setOffset(state.offset);
+    };
+  }, [state.page, state.offset, setOffset]);
 
 
   if (state.loading) return <p className="text-center mt-4">Loading...</p>;
