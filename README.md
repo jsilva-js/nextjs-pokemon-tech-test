@@ -41,7 +41,7 @@ It covers the data flow from fetching Pokémon information from an external API 
 
 ---
 
-## Poplin Test Preview Video
+## Test Preview Video
 
 https://github.com/user-attachments/assets/62c8e51b-755f-4d55-986f-a4f2b5c46f79
 
@@ -49,7 +49,7 @@ https://github.com/user-attachments/assets/62c8e51b-755f-4d55-986f-a4f2b5c46f79
 
 - [Pokémon Data Storage and Retrieval Documentation](#pokémon-data-storage-and-retrieval-documentation)
   - [Key Takeaways:](#key-takeaways)
-  - [Poplin Test Preview Video](#poplin-test-preview-video)
+  - [Test Preview Video](#test-preview-video)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
   - [Backend Implementation](#backend-implementation)
@@ -68,7 +68,7 @@ https://github.com/user-attachments/assets/62c8e51b-755f-4d55-986f-a4f2b5c46f79
 
 ## Overview
 
-Poplin Technical test is a Pokemon catalog built with Next.js, using the App Router and TypeScript. It fetches data from the [PokeAPI](https://pokeapi.co/) and stores it in a SQLite database via Prisma ORM. The frontend displays a list of Pokémon with pagination and allows users to view details of individual Pokémon.
+Technical test is a Pokemon catalog built with Next.js, using the App Router and TypeScript. It fetches data from the [PokeAPI](https://pokeapi.co/) and stores it in a SQLite database via Prisma ORM. The frontend displays a list of Pokémon with pagination and allows users to view details of individual Pokémon.
 
 ---
 
